@@ -391,11 +391,13 @@ body {
     gap: 40px;
     overflow-x: auto;
     padding: 20px 0;
-    scrollbar-width: none; /* Ocultar scroll en Firefox */
+    scrollbar-width: none;
+    /* Ocultar scroll en Firefox */
 }
 
 .top-ten-grid::-webkit-scrollbar {
-    display: none; /* Ocultar scroll en Chrome/Safari */
+    display: none;
+    /* Ocultar scroll en Chrome/Safari */
 }
 
 .top-card {
@@ -418,8 +420,9 @@ body {
     object-fit: cover;
     border-radius: 4px;
     z-index: 1;
-    margin-left: 40px; /* Espacio para el número */
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    margin-left: 40px;
+    /* Espacio para el número */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 /* El número gigante estilo Netflix */
@@ -432,7 +435,8 @@ body {
     line-height: 1;
     z-index: 2;
     color: var(--bg);
-    -webkit-text-stroke: 3px #555; /* Borde del número */
+    -webkit-text-stroke: 3px #555;
+    /* Borde del número */
     font-family: 'Arial Black', sans-serif;
 }
 
@@ -440,11 +444,26 @@ body {
     -webkit-text-stroke: 3px var(--primary);
 }
 
+#historialGrid .anime-card {
+    border: 1px solid var(--primary);
+    box-shadow: 0 0 15px rgba(255, 77, 77, 0.2);
+}
+
+#historialGrid .anime-card:hover {
+    transform: scale(1.02);
+}
+
+#continuarViendoSection h2 {
+    color: var(--primary);
+}
+
 /* --- Sistema de Modales Reutilizable --- */
 .koi-modal {
-    display: none; /* Oculto por defecto */
+    display: none;
+    /* Oculto por defecto */
     position: fixed;
-    z-index: 5000; /* Por encima de todo, incluso del reproductor */
+    z-index: 5000;
+    /* Por encima de todo, incluso del reproductor */
     inset: 0;
     background: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(5px);
@@ -467,7 +486,7 @@ body {
     position: relative;
     border: 1px solid #333;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     transform: translateY(-20px);
     transition: transform 0.3s ease;
 }
@@ -512,8 +531,13 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* Footer */
@@ -521,10 +545,11 @@ footer {
     padding: 48px;
     border-radius: 16px;
     background: rgb(0 0 0 / 30%);
-    color: white; 
+    color: white;
 }
 
-.top, .bottom {
+.top,
+.bottom {
     display: flex;
     gap: 48px;
     width: 100%;
@@ -538,10 +563,10 @@ footer {
     padding: 32px 0 0;
     align-items: center;
     border-top: 2px solid #2e2d42;
-    justify-content: space-between; 
+    justify-content: space-between;
 }
 
-.top > div {
+.top>div {
     flex: 1;
 }
 
@@ -610,7 +635,7 @@ button:hover {
         flex-direction: column-reverse;
         text-align: center;
     }
-    
+
     .socials {
         justify-content: center;
     }
