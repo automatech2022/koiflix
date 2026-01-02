@@ -47,6 +47,13 @@
             </div>
         </section>
 
+        <section id="continuarViendoSection" class="section-container" style="display: none;">
+            <h2><i class="fa-solid fa-clock-rotate-left"></i> Continuar Viendo</h2>
+            <div id="historialGrid" class="anime-grid">
+                <p style="padding: 20px;">Cargando...</p>
+            </div>
+        </section>
+
         <section class="section-container">
             <h2><i class="fa-solid fa-arrows-rotate"></i> Recientes</h2>
             <div class="anime-grid" id="recentGrid">
@@ -76,7 +83,7 @@
             <div class="left">
                 <h2 class="h2">Contactanos</h2>
                 <blockquote>Donde el anime no tiene publicidad tóxica.</blockquote>
-                <button>
+                <button onclick="alertaCorreo()">
                     Ir al correo...
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -99,6 +106,16 @@
             <p>Tu plataforma favorita de anime sin publicidad invasiva. <br>
                 Disfruta de los mejores estrenos de la temporada en alta calidad.</p>
             <button id="closeWelcome" class="btn-modal">¡Empezar a ver!</button>
+        </div>
+    </div>
+
+    <div id="alertCorreo" class="koi-modal">
+        <div class="modal-box">
+            <i class="fas fa-tools main-icon" style="color: #ffcc00;"></i>
+            <h2>¡Muy pronto!</h2>
+            <p id="alertMessage">El sistema de correo se encuentra en desarrollo. Vuelve pronto para descubrir cómo
+                puedes comunicarte con los creadores del proyecto.</p>
+            <button id="closeAlert" class="btn-modal">Entendido</button>
         </div>
     </div>
 
