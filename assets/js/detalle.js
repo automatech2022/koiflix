@@ -1,7 +1,7 @@
 // === Variables Globales ===
 let videoData = null;
+window.currentAnimeData = null;
 
-// === Lógica Principal (Un solo DOMContentLoaded) ===
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const animeId = params.get('id');
@@ -12,73 +12,52 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-        // 1. Cargar base de datos de videos local y datos de la API en paralelo
         await cargarBaseDatosVideos(animeId);
-        const anime = await ApiService.getDetails(animeId);
+        window.currentAnimeData = await ApiService.getDetails(animeId);
         const episodes = await ApiService.getEpisodes(animeId);
 
-        // 2. Actualizar título de la pestaña
-        document.title = `Koiflix - ${anime.title}`;
+        document.title = `Koiflix - ${window.currentAnimeData.title}`;
 
-        // 3. Renderizar componentes
-        renderDetalles(anime);
-        renderEpisodios(episodes, anime.title);
+        renderDetalles(window.currentAnimeData);
+        renderEpisodios(episodes, window.currentAnimeData.title);
 
     } catch (error) {
-        console.error("Error cargando la página de detalles:", error);
-        document.title = "Koiflix - Error";
+        console.error("Error cargando detalles:", error);
     }
 });
 
-// === Funciones de Renderizado ===
+/* ================= RENDER ================= */
 
 function renderDetalles(anime) {
     const container = document.getElementById('detalleContent');
 
-    // 1. Diccionario de traducción para Géneros
     const generoMap = {
-        "Action": "Acción", "Adventure": "Aventura", "Comedy": "Comedia", "Drama": "Drama",
-        "Fantasy": "Fantasía", "Romance": "Romance", "Sci-Fi": "Ciencia Ficción",
-        "Slice of Life": "Recuentos de la vida", "Supernatural": "Sobrenatural",
-        "Mystery": "Misterio", "Horror": "Terror", "Psychological": "Psicológico",
-        "Sports": "Deportes", "Ecchi": "Ecchi", "Suspense": "Suspenso", "Award Winning": "Premiados"
+        Action: "Acción", Adventure: "Aventura", Comedy: "Comedia", Drama: "Drama",
+        Fantasy: "Fantasía", Romance: "Romance", "Sci-Fi": "Ciencia Ficción",
+        "Slice of Life": "Recuentos de la vida", Supernatural: "Sobrenatural",
+        Mystery: "Misterio", Horror: "Terror", Psychological: "Psicológico",
+        Sports: "Deportes", Ecchi: "Ecchi", Suspense: "Suspenso", "Award Winning": "Premiados"
     };
 
-    const generos = anime.genres.map(g => `<span>${generoMap[g.name] || g.name}</span>`).join('');
+    const generos = anime.genres
+        .map(g => `<span>${generoMap[g.name] || g.name}</span>`)
+        .join('');
 
-    // 2. Diccionario para Estados
     const statusMap = {
         "Currently Airing": "En Emisión",
         "Finished Airing": "Finalizado",
         "Not yet aired": "Próximamente"
     };
 
-    // 3. Lógica para el Icono de Temporada
-    const seasonMap = {
-        "winter": { nombre: "Invierno", icono: "fa-snowflake" },
-        "spring": { nombre: "Primavera", icono: "fa-seedling" },
-        "summer": { nombre: "Verano", icono: "fa-sun" },
-        "fall": { nombre: "Otoño", icono: "fa-leaf" }
-    };
-
-    const temporadaInfo = seasonMap[anime.season] || null;
-    const temporadaHTML = temporadaInfo
-        ? `<div class="season-tag">
-            <i class="fas ${temporadaInfo.icono}"></i> 
-            ${temporadaInfo.nombre} ${anime.year || ''}
-           </div>`
-        : '';
-
     container.innerHTML = `
         <div class="anime-header">
-            <img src="${anime.images.jpg.large_image_url}" alt="${anime.title}">
+            <img src="${anime.images.jpg.large_image_url}">
             <div class="info-extra">
-                ${temporadaHTML}
                 <h1>${anime.title}</h1>
-                <div class="generos" style="margin: 15px 0;">${generos}</div>
-                <p><strong>Puntuación:</strong> ⭐ ${anime.score || 'N/A'}</p>
-                <p><strong>Estado:</strong> ${statusMap[anime.status] || anime.status}</p>
-                <p style="margin-top: 20px; line-height: 1.6;">${anime.synopsis || 'Sin descripción disponible.'}</p>
+                <div class="generos">${generos}</div>
+                <p>⭐ ${anime.score || 'N/A'}</p>
+                <p>${statusMap[anime.status] || anime.status}</p>
+                <p>${anime.synopsis || 'Sin descripción.'}</p>
             </div>
         </div>
         <div class="episode-section">
@@ -89,95 +68,95 @@ function renderDetalles(anime) {
 }
 
 function renderEpisodios(episodes, animeTitle) {
-    const listContainer = document.getElementById('episodeList');
-    listContainer.innerHTML = ''; 
+    const list = document.getElementById('episodeList');
+    list.innerHTML = '';
 
-    // 1. Verificar si tenemos datos manuales en videos.json para este ID
-    // videoData viene de la función cargarBaseDatosVideos(animeId)
-    const tieneVideosLocales = videoData && Object.keys(videoData).length > 0;
-
-    // 2. Si la API no trae nada PERO nosotros sí tenemos links en el JSON
-    if ((!episodes || episodes.length === 0) && tieneVideosLocales) {
-        Object.keys(videoData).forEach(epId => {
-            const item = crearElementoEpisodio(epId, `Parte ${epId}`, animeTitle);
-            listContainer.appendChild(item);
+    if ((!episodes || episodes.length === 0) && videoData) {
+        Object.keys(videoData).forEach(id => {
+            list.appendChild(crearEpisodio(id, `Parte ${id}`, animeTitle));
         });
         return;
     }
 
-    // 3. Si realmente no hay nada en ningún lado
-    if ((!episodes || episodes.length === 0) && !tieneVideosLocales) {
-        listContainer.innerHTML = '<p class="no-episodes">No hay episodios listados. Revisa más tarde.</p>';
+    if (!episodes || episodes.length === 0) {
+        list.innerHTML = '<p>No hay episodios.</p>';
         return;
     }
 
-    // 4. Si la API trae episodios, los listamos normalmente
     episodes.forEach(ep => {
-        const item = crearElementoEpisodio(ep.mal_id, ep.title, animeTitle);
-        listContainer.appendChild(item);
+        list.appendChild(crearEpisodio(ep.mal_id, ep.title, animeTitle));
     });
 }
 
-// Función auxiliar para crear el HTML del episodio y evitar repetir código
-function crearElementoEpisodio(id, titulo, animeTitle) {
-    const item = document.createElement('div');
-    item.className = 'episode-item';
-    
-    const urlVideo = videoData ? videoData[id] : null;
+function crearEpisodio(id, titulo, animeTitle) {
+    const div = document.createElement('div');
+    const url = videoData ? videoData[id] : null;
 
-    item.innerHTML = `
+    div.className = 'episode-item';
+    div.innerHTML = `
         <span>Episodio ${id}: ${titulo || 'Sin título'}</span>
-        <span class="status-link" style="color: ${urlVideo ? 'var(--primary)' : '#666'}">
-            ${urlVideo ? '▶ Reproducir' : 'Próximamente'}
+        <span style="color:${url ? 'var(--primary)' : '#666'}">
+            ${url ? '▶ Reproducir' : 'Próximamente'}
         </span>
     `;
 
-    item.onclick = () => {
-        if (urlVideo) {
-            abrirReproductor(urlVideo, `Episodio ${id} - ${animeTitle}`);
-        } else {
-            mostrarAlertaEpisodio();
-        }
+    div.onclick = () => {
+        url ? abrirReproductor(url, `Episodio ${id} - ${animeTitle}`) : mostrarAlertaEpisodio();
     };
-    return item;
+
+    return div;
 }
 
-// === Funciones de Soporte y Modales ===
+/* ================= VIDEO ================= */
 
 async function cargarBaseDatosVideos(animeId) {
     try {
-        const response = await fetch('./assets/data/videos.json');
-        const data = await response.json();
-        videoData = data[animeId] || null;
+        const res = await fetch('./assets/data/videos.json');
+        const json = await res.json();
+        videoData = json[animeId] || null;
     } catch (e) {
-        console.error("Error al cargar videos.json:", e);
+        console.error("videos.json error", e);
     }
 }
 
-function abrirReproductor(url, title) {
+function abrirReproductor(url, episodeTitle) {
     const modal = document.getElementById('videoModal');
     const container = document.getElementById('videoContainer');
-    const titleDisplay = document.getElementById('playingTitle');
+    const title = document.getElementById('playingTitle');
 
     container.innerHTML = '';
-    titleDisplay.innerText = title;
+    title.innerText = episodeTitle;
 
-    const iframe = window.createSafeIframe(url);
-    container.appendChild(iframe);
-
+    container.appendChild(window.createSafeIframe(url));
     modal.style.display = 'flex';
+
+    localStorage.setItem('koiflix_ultimo_visto', JSON.stringify({
+        animeId: window.currentAnimeData.mal_id,
+        animeTitle: window.currentAnimeData.title,
+        episodeTitle,
+        image: window.currentAnimeData.images.jpg.large_image_url,
+        url,
+        fecha: Date.now()
+    }));
 }
 
-function mostrarAlertaEpisodio() {
-    const modal = document.getElementById('alertModal');
-    modal.classList.add('active');
-
-    document.getElementById('closeAlert').onclick = () => modal.classList.remove('active');
-    modal.onclick = (e) => { if (e.target === modal) modal.classList.remove('active'); };
-}
-
-// Evento para cerrar el reproductor
 document.querySelector('.close-modal').onclick = () => {
     document.getElementById('videoModal').style.display = 'none';
     document.getElementById('videoContainer').innerHTML = '';
 };
+
+// Función para mostrar el modal de alerta
+function mostrarAlertaEpisodio() {
+    const modal = document.getElementById('alertModal');
+    modal.classList.add('active');
+    
+    // Cerrar al hacer clic en el botón
+    document.getElementById('closeAlert').onclick = () => {
+        modal.classList.remove('active');
+    };
+
+    // Cerrar al hacer clic fuera del cuadro blanco
+    modal.onclick = (e) => {
+        if(e.target === modal) modal.classList.remove('active');
+    }
+}
