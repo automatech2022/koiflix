@@ -147,22 +147,23 @@
                 <i class="fab fa-paypal"></i>
                 <h3>PayPal</h3>
                 <p>Donación rápida y segura.</p>
-                <a href="TU_LINK_PAYPAL" class="btn-donate">Donar ahora</a>
+                <button onclick="mostrarAlertaEpisodio()" class="btn-donate">Ver dirección</button>
+                <!--<a href="#" class="btn-donate">Donar ahora</a>-->
             </div>
 
             <div class="donate-card">
                 <i class="fas fa-coffee"></i>
                 <h3>Ko-fi</h3>
                 <p>Cómpranos un café para seguir programando.</p>
-                <a href="TU_LINK_KOFI" class="btn-donate">Invitar un café</a>
+                <button onclick="mostrarAlertaEpisodio()" class="btn-donate">Ver dirección</button>
+                <!--<a href="#" class="btn-donate">Invitar un café</a>-->
             </div>
 
             <div class="donate-card">
                 <i class="fab fa-bitcoin"></i>
                 <h3>Cripto</h3>
                 <p>Aceptamos BTC, ETH y USDT.</p>
-                <button onclick="alert('Billetera BTC: DIRECCION_AQUI\nBilletera USDT (TRC20): DIRECCION_AQUI')"
-                    class="btn-donate">Ver dirección</button>
+                <button onclick="mostrarAlertaEpisodio()" class="btn-donate">Ver dirección</button>
             </div>
         </div>
     </main>
@@ -188,7 +189,31 @@
         </div>
     </footer>
 
+    <div id="alertModal" class="koi-modal">
+        <div class="modal-box">
+            <i class="fas fa-tools main-icon" style="color: #ffcc00;"></i>
+            <h2>¡Muy pronto!</h2>
+            <p id="alertMessage">El sistema de donaciones se encuentra en desarrollo. Vuelve pronto para descubrir cómo
+                puedes apoyar el proyecto.</p>
+            <button id="closeAlert" class="btn-modal">Entendido</button>
+        </div>
+    </div>
+
     <script src="./assets/js/main.js"></script>
+    <script>
+        function mostrarAlertaEpisodio() {
+            const modal = document.getElementById('alertModal');
+            modal.classList.add('active');
+
+            document.getElementById('closeAlert').onclick = () => {
+                modal.classList.remove('active');
+            };
+
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            }
+        }
+    </script>
 </body>
 
 </html>
