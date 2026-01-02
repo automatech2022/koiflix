@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/img/logo-koi.png" type="image/x-icon">
+    <link rel="icon" href="./assets/img/logo-koi.png" type="image/png">
+    <link rel="apple-touch-icon" href="./assets/img/logo-koi.png">
+    <title>Koiflix - Apoyar el proyecto</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .donate-container {
+            max-width: 800px;
+            margin: 60px auto;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- Estilos de la Barra de Progreso --- */
+        .goal-section {
+            background: var(--surface);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0 50px 0;
+            border: 1px solid #333;
+        }
+
+        .goal-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .progress-bar-bg {
+            background: #333;
+            height: 20px;
+            border-radius: 10px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, var(--primary), #ff7676);
+            height: 100%;
+            width: 0%;
+            /* CAMBIA ESTE VALOR SEGÚN EL PROGRESO */
+            transition: width 1s ease-in-out;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .goal-status {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* --- Estilos Existentes --- */
+        .donate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .donate-card {
+            background: var(--surface);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid #333;
+            transition: 0.3s;
+        }
+
+        .donate-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .donate-card i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .btn-donate {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        h1 span {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">KOI<span>FLIX</span></a>
+
+            <button class="menu-toggle" id="menuToggle">☰</button>
+
+            <div class="nav-group" id="navGroup">
+                <nav class="nav-links" id="navLinks">
+                    <a href="index.html">Inicio</a>
+                    <a href="temporada.html">Temporada</a>
+                    <a href="top.html">Top</a>
+                    <a href="donaciones.html" class="nav-donate">
+                        <i class="fas fa-gift"></i> Apoyar
+                    </a>
+                </nav>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar anime...">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="donate-container">
+        <h1>Apoya a <span>Koiflix</span></h1>
+        <p>Tu ayuda nos permite mantener los servidores libres de publicidad invasiva y actualizar el catálogo
+            diariamente.</p>
+
+        <section class="goal-section">
+            <div class="goal-info">
+                <span>Meta del Mes (Servidores)</span>
+                <span>00%</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <p class="goal-status">Llevamos <strong>$0.00US</strong> de una meta de <strong>$50.00US</strong></p>
+        </section>
+
+        <div class="donate-grid">
+            <div class="donate-card">
+                <i class="fab fa-paypal"></i>
+                <h3>PayPal</h3>
+                <p>Donación rápida y segura.</p>
+                <a href="TU_LINK_PAYPAL" class="btn-donate">Donar ahora</a>
+            </div>
+
+            <div class="donate-card">
+                <i class="fas fa-coffee"></i>
+                <h3>Ko-fi</h3>
+                <p>Cómpranos un café para seguir programando.</p>
+                <a href="TU_LINK_KOFI" class="btn-donate">Invitar un café</a>
+            </div>
+
+            <div class="donate-card">
+                <i class="fab fa-bitcoin"></i>
+                <h3>Cripto</h3>
+                <p>Aceptamos BTC, ETH y USDT.</p>
+                <button onclick="alert('Billetera BTC: DIRECCION_AQUI\nBilletera USDT (TRC20): DIRECCION_AQUI')"
+                    class="btn-donate">Ver dirección</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="top">
+            <div class="left">
+                <h2 class="h2">Contactanos para quejas.</h2>
+                <blockquote>Donde el anime no tiene publicidad tóxica.</blockquote>
+                <button>
+                    Ir al correo...
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="left">
+                <p class="p">&copy; AutoMatech 2022, All rights reserved.</p>
+            </div>
+            <div class="right socials">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="./assets/js/main.js"></script>
+</body>
+
+</html>

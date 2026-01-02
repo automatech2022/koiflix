@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/img/logo-koi.png" type="image/x-icon">
+    <link rel="icon" href="./assets/img/logo-koi.png" type="image/png">
+    <link rel="apple-touch-icon" href="./assets/img/logo-koi.png">
+    <title>Koiflix</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">KOI<span>FLIX</span></a>
+
+            <button class="menu-toggle" id="menuToggle">☰</button>
+
+            <div class="nav-group" id="navGroup">
+                <nav class="nav-links" id="navLinks">
+                    <a href="index.html">Inicio</a>
+                    <a href="temporada.html">Temporada</a>
+                    <a href="top.html">Top</a>
+                    <a href="donaciones.html" class="nav-donate">
+                        <i class="fas fa-gift"></i> Apoyar
+                    </a>
+                </nav>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar anime...">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="mainContent">
+        <section class="hero-slider" id="heroSlider">
+            <div class="slider-content" id="sliderContent">
+            </div>
+            <div class="slider-controls">
+                <button id="prevBtn">&lt;</button>
+                <button id="nextBtn">&gt;</button>
+            </div>
+        </section>
+
+        <section class="section-container">
+            <h2><i class="fa-solid fa-arrows-rotate"></i> Recientes</h2>
+            <div class="anime-grid" id="recentGrid">
+                <p style="padding: 20px;">Cargando...</p>
+            </div>
+        </section>
+
+        <section class="section-container">
+            <h2><i class="fa-solid fa-fire"></i> Hentai Popular</h2>
+            <div class="anime-grid" id="hentaiGrid">
+                <p style="padding: 20px;">Cargando...</p>
+            </div>
+        </section>
+
+        <section class="section-container">
+            <h2><i class="fa-solid fa-star"></i> Top 10 Favoritos Global</h2>
+            <div class="top-ten-wrapper">
+                <div class="top-ten-grid" id="topFavoritesGrid">
+                    <p style="padding: 20px;">Cargando el Top 10...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="top">
+            <div class="left">
+                <h2 class="h2">Contactanos</h2>
+                <blockquote>Donde el anime no tiene publicidad tóxica.</blockquote>
+                <button>
+                    Ir al correo...
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="left">
+                <p class="p">&copy; AutoMatech 2022, All rights reserved.</p>
+            </div>
+            <div class="right socials">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="welcomeModal" class="koi-modal">
+        <div class="modal-box">
+            <i class="fas fa-rocket main-icon"></i>
+            <h2>¡Bienvenido a Koiflix!</h2>
+            <p>Tu plataforma favorita de anime sin publicidad invasiva. <br>
+                Disfruta de los mejores estrenos de la temporada en alta calidad.</p>
+            <button id="closeWelcome" class="btn-modal">¡Empezar a ver!</button>
+        </div>
+    </div>
+
+    <script src="./assets/js/apiService.js"></script>
+    <script src="./assets/js/main.js"></script>
+</body>
+
+</html>

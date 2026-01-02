@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/img/logo-koi.png" type="image/x-icon">
+    <link rel="icon" href="./assets/img/logo-koi.png" type="image/png">
+    <link rel="apple-touch-icon" href="./assets/img/logo-koi.png">
+    <title>Koiflix - Top</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo">KOI<span>FLIX</span></a>
+
+            <button class="menu-toggle" id="menuToggle">☰</button>
+
+            <div class="nav-group" id="navGroup">
+                <nav class="nav-links" id="navLinks">
+                    <a href="index.html">Inicio</a>
+                    <a href="temporada.html">Temporada</a>
+                    <a href="top.html">Top</a>
+                    <a href="donaciones.html" class="nav-donate">
+                        <i class="fas fa-gift"></i> Apoyar
+                    </a>
+                </nav>
+
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Buscar anime...">
+                    <div id="searchResults" class="search-results"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="section-container">
+        <h2>Top los Mejores Animes de la Historia</h2>
+        <div class="anime-grid" id="topGrid"></div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <button id="loadMoreBtn" class="btn-play">Cargar más resultados</button>
+        </div>
+    </main>
+
+    <footer>
+        <div class="top">
+            <div class="left">
+                <h2 class="h2">Contactanos para quejas.</h2>
+                <blockquote>Donde el anime no tiene publicidad tóxica.</blockquote>
+                <button>
+                    Ir al correo...
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="left">
+                <p class="p">&copy; AutoMatech 2022, All rights reserved.</p>
+            </div>
+            <div class="right socials">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="./assets/js/apiService.js"></script>
+    <script src="./assets/js/main.js"></script>
+    <script src="./assets/js/top.js"></script>
+</body>
+
+</html>

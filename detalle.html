@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/img/logo-koi.png" type="image/x-icon">
+    <link rel="icon" href="./assets/img/logo-koi.png" type="image/png">
+    <link rel="apple-touch-icon" href="./assets/img/logo-koi.png">
+    <title>Koiflix - Cargando...</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="./assets/css/detalle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">KOI<span>FLIX</span></a>
+            <a href="index.html" style="color: white; text-decoration: none; margin-left: 10px;" class="volver">←
+                Volver</a>
+        </div>
+    </header>
+
+    <main id="detalleContent" class="container">
+        <div id="loader">Cargando información...</div>
+    </main>
+
+    <div id="videoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="videoContainer"></div>
+            <h3 id="playingTitle" style="margin-top: 15px;"></h3>
+        </div>
+    </div>
+
+    <footer>
+        <div class="top">
+            <div class="left">
+                <h2 class="h2">Contactanos para quejas.</h2>
+                <blockquote>Donde el anime no tiene publicidad tóxica.</blockquote>
+                <button>
+                    Ir al correo...
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="left">
+                <p class="p">&copy; AutoMatech 2022, All rights reserved.</p>
+            </div>
+            <div class="right socials">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="alertModal" class="koi-modal">
+        <div class="modal-box">
+            <i class="fas fa-clock main-icon" style="color: #ffcc00;"></i>
+            <h2>¡Casi listo!</h2>
+            <p id="alertMessage">Estamos trabajando para traer este episodio lo antes posible. ¡Vuelve pronto para
+                disfrutarlo!</p>
+            <button id="closeAlert" class="btn-modal">Entendido</button>
+        </div>
+    </div>
+
+    <script src="./assets/js/apiService.js"></script>
+    <script src="./assets/js/detalle.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,225 @@
+/* --- Variables y Reset --- */
+:root {
+    --primary: #ff4d4d;
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --text: #ffffff;
+}
+
+/* --- Estructura Principal --- */
+#detalleContent {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.anime-header {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    flex-wrap: wrap; 
+    align-items: flex-start;
+}
+
+/* Imagen Adaptable */
+.anime-header img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.info-extra {
+    flex: 1;
+    min-width: 300px;
+}
+
+.info-extra h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--text);
+}
+
+.generos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.generos span {
+    background: var(--primary);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: white;
+}
+
+.season-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #00d2ff;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.season-tag i {
+    font-size: 1.2rem;
+}
+
+/* --- Lista de Episodios --- */
+.episode-section {
+    margin-top: 50px;
+    background: var(--surface);
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.episode-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Scrollbar para la lista */
+.episode-list::-webkit-scrollbar {
+    width: 6px;
+}
+.episode-list::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+.episode-item {
+    padding: 18px;
+    background: #252525;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-left: 4px solid transparent;
+}
+
+.episode-item:hover {
+    background: #333;
+    border-left: 4px solid var(--primary);
+    transform: translateX(5px);
+}
+
+/* --- Modal y Reproductor --- */
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.modal-content {
+    width: 100%;
+    max-width: 1000px;
+    position: relative;
+}
+
+#videoContainer {
+    position: relative;
+    padding-bottom: 56.25%; 
+    height: 0;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(255, 77, 77, 0.3);
+}
+
+#videoContainer iframe {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    border: none;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 38px;
+    color: white;
+    cursor: pointer;
+    z-index: 3000;
+    background: rgba(0,0,0,0.6);
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --- MEDIA QUERIES (RESPONSIVE) --- */
+
+/* Tablets */
+@media (max-width: 992px) {
+    .info-extra h1 { font-size: 2rem; }
+    .anime-header { gap: 20px; }
+}
+
+/* Celulares (Ajustes clave) */
+@media (max-width: 768px) {
+    .anime-header {
+        order: 1;
+    }
+
+    .info-extra {
+        min-width: 100%;
+    }
+
+    .anime-header img {
+        max-width: 250px; 
+        margin-bottom: 10px;
+    }
+
+    .generos {
+        justify-content: center;
+    }
+
+    .episode-item {
+        flex-direction: row; 
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+
+    .episode-section {
+        order: 2;
+        margin-top: 30px;
+    }
+
+    .info-extra h1 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+    .episode-item {
+        flex-direction: column; 
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .close-modal {
+        top: -40px;
+        right: 5px;
+    }
+}
