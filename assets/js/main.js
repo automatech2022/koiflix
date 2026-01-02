@@ -1,5 +1,4 @@
 // Funcion del Buscador
-
 const searchInput = document.getElementById('searchInput');
 const searchResults = document.getElementById('searchResults');
 
@@ -8,7 +7,6 @@ let timeout = null;
 searchInput.addEventListener('input', (e) => {
     const query = e.target.value.trim();
 
-    // Limpiar el timeout anterior para esperar a que el usuario termine de escribir
     clearTimeout(timeout);
 
     if (query.length < 3) {
@@ -19,7 +17,7 @@ searchInput.addEventListener('input', (e) => {
     timeout = setTimeout(async () => {
         const data = await ApiService.search(query);
         renderResults(data);
-    }, 500); // Espera 500ms
+    }, 500);
 });
 
 function renderResults(animes) {
@@ -57,7 +55,6 @@ document.addEventListener('click', (e) => {
 });
 
 // FUNCION DE MENU HAMBURGUESA
-
 const menuToggle = document.getElementById('menuToggle');
 const navGroup = document.getElementById('navGroup');
 
@@ -66,7 +63,6 @@ menuToggle.addEventListener('click', () => {
 });
 
 // SLIDER HERO
-
 let currentSlide = 0;
 let slides = [];
 
@@ -92,7 +88,6 @@ async function initHero() {
 
     slides = document.querySelectorAll('.slider-item');
 
-    // Auto-reproducción cada 5 segundos
     setInterval(nextSlide, 5000);
 }
 
@@ -113,7 +108,6 @@ document.getElementById('prevBtn').addEventListener('click', prevSlide);
 initHero();
 
 function verDetalles(id) {
-    // Redirige pasando el ID como parámetro en la URL
     window.location.href = `detalle.html?id=${id}`;
 }
 
@@ -137,7 +131,6 @@ async function initRecent() {
             </div>
         `;
 
-        // Evento para ver detalles (por ahora log)
         card.onclick = () => verDetalles(anime.mal_id);
 
         recentGrid.appendChild(card);
@@ -178,7 +171,7 @@ async function initFavorites() {
     topAnimes.slice(0, 10).forEach((anime, index) => {
         const card = document.createElement('div');
         card.className = 'top-card';
-        
+
         card.innerHTML = `
             <span class="top-number">${index + 1}</span>
             <img src="${anime.images.jpg.large_image_url}" alt="${anime.title}" loading="lazy">
@@ -189,22 +182,42 @@ async function initFavorites() {
     });
 }
 
+function cargarHistorialInicio() {
+    const raw = localStorage.getItem('koiflix_ultimo_visto');
+    if (!raw) return;
+
+    const h = JSON.parse(raw);
+
+    document.getElementById('continuarViendoSection').style.display = 'block';
+
+    document.getElementById('historialGrid').innerHTML = `
+        <div class="anime-card" onclick="verDetalles(${h.animeId})">
+            <div class="score-badge" style="background:var(--primary)">
+                ▶ Reanudar
+            </div>
+            <img src="${h.image}">
+            <div class="anime-card-info">
+                <h3>${h.animeTitle}</h3>
+                <span>${h.episodeTitle}</span>
+            </div>
+        </div>
+    `;
+}
+
 // ACTUALIZA TU LISTENER EXISTENTE:
 document.addEventListener('DOMContentLoaded', async () => {
+
+    cargarHistorialInicio();
+
     try {
-        // 1. Cargamos el Hero (Slider) primero
         await initHero();
-        
-        // 2. Esperamos un poquito para no saturar la API (0.5 segundos)
+
         await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // 3. Cargamos el Top 10 que agregamos recién
+
         await initFavorites();
 
-        // 4. Otro pequeño respiro
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        // 5. Cargamos el resto de secciones
         await initRecent();
 
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -222,20 +235,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const welcomeModal = document.getElementById('welcomeModal');
     const closeBtn = document.getElementById('closeWelcome');
 
-    // 1. Verificar si ya se mostró antes
     const hasVisited = localStorage.getItem('koiflix_welcomed');
 
     if (!hasVisited) {
-        // Mostrar el modal si es la primera vez
+
         setTimeout(() => {
             welcomeModal.classList.add('active');
-        }, 1000); // Pequeño retraso de 1 segundo para impacto visual
+        }, 1000);
     }
 
-    // 2. Cerrar y guardar en LocalStorage
     closeBtn.addEventListener('click', () => {
         welcomeModal.classList.remove('active');
-        // Guardamos el valor para que no vuelva a aparecer
         localStorage.setItem('koiflix_welcomed', 'true');
     });
 });
+
+function alertaCorreo() {
+    const modal = document.getElementById('alertCorreo');
+    modal.classList.add('active');
+
+    document.getElementById('closeAlert').onclick = () => {
+        modal.classList.remove('active');
+    };
+
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    }
+}
