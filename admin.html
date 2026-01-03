@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koiflix Admin - Gestión Segura</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos del Admin (Mantener los anteriores) */
+        .admin-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background: var(--surface);
+            border-radius: 12px;
+            filter: blur(5px);
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        .admin-container.unlocked {
+            filter: blur(0);
+            pointer-events: auto;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #000;
+            color: #fff;
+        }
+
+        .anime-selection {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: #252525;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .anime-selection img {
+            width: 80px;
+            border-radius: 5px;
+        }
+
+        .episode-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .episode-row input {
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        .ep-num {
+            width: 60px;
+            text-align: center;
+        }
+
+        .ep-url {
+            flex: 1;
+        }
+
+        #jsonResult {
+            width: 100%;
+            height: 150px;
+            background: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-action {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* --- ESTILOS DEL MODAL DE CONTRASEÑA --- */
+        #authModal {
+            display: flex;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-box {
+            background: var(--surface);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(255, 77, 77, 0.4);
+        }
+
+        .auth-box input {
+            display: block;
+            width: 100%;
+            margin: 20px 0;
+            padding: 12px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            text-align: center;
+            font-size: 1.2rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="authModal">
+        <div class="auth-box">
+            <i class="fas fa-lock" style="font-size: 3rem; color: var(--primary);"></i>
+            <h2 style="margin-top: 15px;">Acceso Restringido</h2>
+            <p>Introduce la contraseña de administrador</p>
+            <input type="password" id="adminPass" placeholder="••••••••">
+            <button class="btn-action" onclick="verificarAcceso()">Entrar al Panel</button>
+            <p id="errorMsg" style="color: red; margin-top: 10px; display: none;">Contraseña incorrecta</p>
+        </div>
+    </div>
+
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">KOI<span>FLIX ADMIN</span></a>
+            <a href="index.html" style="color: white; text-decoration: none;">← Volver al sitio</a>
+        </div>
+    </header>
+
+    <main class="admin-container" id="panelContainer">
+        <h2>Gestor de Episodios</h2>
+        <div class="search-box">
+            <input type="text" id="adminSearch" placeholder="Nombre del anime...">
+            <button class="btn-action" onclick="buscarAnimeAdmin()">Buscar en Jikan</button>
+        </div>
+
+        <div id="resultsList"></div>
+
+        <div id="editorSection" class="anime-selection">
+            <img id="selectedImg" src="" alt="">
+            <div>
+                <h3 id="selectedTitle"></h3>
+                <p>ID: <strong id="selectedId" style="color: var(--primary);"></strong></p>
+            </div>
+        </div>
+
+        <div id="episodesArea" style="display:none;">
+            <div id="episodeInputs"></div>
+            <button class="btn-action" style="background: #28a745;" onclick="agregarFilaEpisodio()">+ Episodio</button>
+            <button class="btn-action" style="background: #007bff;" onclick="generarJSON()">Generar Código</button>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <textarea id="jsonResult" readonly placeholder="El JSON aparecerá aquí..."></textarea>
+            <button class="btn-action" onclick="copiarJSON()"><i class="fas fa-copy"></i> Copiar para
+                videos.json</button>
+        </div>
+    </main>
+
+    <script src="./assets/js/apiService.js"></script>
+    <script>
+        // === CONFIGURA TU CONTRASEÑA AQUÍ ===
+        const PASSWORD_SECRET = "koiflix0306";
+
+        function verificarAcceso() {
+            const input = document.getElementById('adminPass').value;
+            const modal = document.getElementById('authModal');
+            const panel = document.getElementById('panelContainer');
+            const error = document.getElementById('errorMsg');
+
+            if (input === PASSWORD_SECRET) {
+                modal.style.display = 'none';
+                panel.classList.add('unlocked');
+            } else {
+                error.style.display = 'block';
+                document.getElementById('adminPass').value = '';
+            }
+        }
+
+        // Permitir entrar con la tecla Enter
+        document.getElementById('adminPass').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verificarAcceso();
+        });
+
+        // --- LÓGICA DEL PANEL (BUSQUEDA Y JSON) ---
+        let currentAnimeId = null;
+
+        async function buscarAnimeAdmin() {
+            const query = document.getElementById('adminSearch').value;
+            if (query.length < 3) return;
+            const data = await ApiService.search(query);
+            const list = document.getElementById('resultsList');
+            list.innerHTML = '';
+
+            data.forEach(anime => {
+                const div = document.createElement('div');
+                div.className = 'result-item';
+                div.style.padding = '10px';
+                div.style.cursor = 'pointer';
+                div.innerHTML = `<strong>${anime.title}</strong> (ID: ${anime.mal_id})`;
+                div.onclick = () => seleccionarAnime(anime.mal_id, anime.title, anime.images.jpg.image_url);
+                list.appendChild(div);
+            });
+        }
+
+        function seleccionarAnime(id, title, img) {
+            currentAnimeId = id;
+            document.getElementById('resultsList').innerHTML = '';
+            document.getElementById('editorSection').style.display = 'flex';
+            document.getElementById('episodesArea').style.display = 'block';
+            document.getElementById('selectedImg').src = img;
+            document.getElementById('selectedTitle').innerText = title;
+            document.getElementById('selectedId').innerText = id;
+            document.getElementById('episodeInputs').innerHTML = '';
+            agregarFilaEpisodio(1);
+        }
+
+        function agregarFilaEpisodio(num) {
+            const container = document.getElementById('episodeInputs');
+            const nextNum = num || container.children.length + 1;
+            const div = document.createElement('div');
+            div.className = 'episode-row';
+            div.innerHTML = `
+                <input type="number" class="ep-num" value="${nextNum}">
+                <input type="text" class="ep-url" placeholder="URL del Iframe">
+                <button onclick="this.parentElement.remove()" style="color:red; background:none; border:none; cursor:pointer;">&times;</button>
+            `;
+            container.appendChild(div);
+        }
+
+        function generarJSON() {
+            const rows = document.querySelectorAll('.episode-row');
+            const eps = {};
+            rows.forEach(r => {
+                const n = r.querySelector('.ep-num').value;
+                const u = r.querySelector('.ep-url').value;
+                if (n && u) eps[n] = u;
+            });
+            const out = {}; out[currentAnimeId] = eps;
+            document.getElementById('jsonResult').value = JSON.stringify(out, null, 2);
+        }
+
+        function copiarJSON() {
+            const area = document.getElementById("jsonResult");
+            area.select();
+            document.execCommand("copy");
+            alert("¡Copiado! Pégalo en tu videos.json");
+        }
+    </script>
+</body>
+
+</html>
